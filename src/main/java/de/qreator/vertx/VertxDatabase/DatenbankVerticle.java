@@ -35,51 +35,22 @@ public class DatenbankVerticle extends AbstractVerticle {
                 .put("url", "jdbc:h2:~/datenbank")
                 .put("driver_class", "org.h2.Driver");
 
-    
+        dbClient = JDBCClient.createShared(vertx, config);
 
-    
+        Future<Void> datenbankFuture = erstelleDatenbank().compose(db -> erstelleUser("user", "geheim"));
 
-    
-
-    private void löscheDatenbank() {
-
-        dbClient.getConnection(res -> {;
-            if (res.succeeded()) {
-                SQLConnection connection = res.result();
-                connection.execute(SQL_DELETE, löschen -> {
-                    if (löschen.succeeded()) {
-                        LOGGER.info("Datenbank erfolgreich gelöscht");
-
-                    } else {
-                        LOGGER.error("Löschen der Datenbank fehlgschlagen" + löschen.cause());
-
-                    }
-                });
-            }
-        });
-    }
-    ;
-    
-        dbClient  = JDBCClient.createShared(vertx, config);
-
-    Future<Void> datenbankFuture = erstelleDatenbank().compose(db -> erstelleUser("user", "geheim"));
-
-    datenbankFuture.setHandler (db  
-         
-         
-        -> {
+        datenbankFuture.setHandler(db
+                -> {
             if (db.succeeded()) {
-            LOGGER.info("Datenbank initialisiert");
-            vertx.eventBus().consumer(EB_ADRESSE, this::onMessage);
-            startFuture.complete();
-        } else {
-            LOGGER.info("Probleme beim Initialisieren der Datenbank");
-            startFuture.fail(db.cause());
+                LOGGER.info("Datenbank initialisiert");
+                vertx.eventBus().consumer(EB_ADRESSE, this::onMessage);
+                startFuture.complete();
+            } else {
+                LOGGER.info("Probleme beim Initialisieren der Datenbank");
+                startFuture.fail(db.cause());
+            }
         }
-    }
-
-
-);
+        );
     }
 
     public void onMessage(Message<JsonObject> message) {
@@ -126,7 +97,7 @@ public class DatenbankVerticle extends AbstractVerticle {
 
     private Future<Void> erstelleUser(String name, String passwort) {
         Future<Void> erstellenFuture = Future.future();
-LOGGER.info("Benutzer erfolgreich erstellt");
+        LOGGER.info("Benutzer erfolgreich erstellt");
         dbClient.getConnection(res -> {
             if (res.succeeded()) {
 
@@ -163,8 +134,7 @@ LOGGER.info("Benutzer erfolgreich erstellt");
         });
         return erstellenFuture;
     }
-  
-     
+
     private void überprüfeUser(Message<JsonObject> message) {
 
         String name = message.body().getString("name");
@@ -194,41 +164,3 @@ LOGGER.info("Benutzer erfolgreich erstellt");
         });
     }
 }
-
-
-private void erstelleNeuenUser(Message<JsonObject> message) {
-        String name = message.body().getString("name");
-        String passwort = message.body().getString("passwort");
-        String adresse = message.body().getString("adresse");
-        String function = message.body().getString("function");
-        if (function == null) {
-            function = "user";
-        }
-        int money = 0;
-        Fututre<Void> userErstelltFutur = erstelleUser(name, passwort, adresse, functon, money);
-        userErstelltFuture.setHandler(reply -> {
-        if (reply.succeeded()) {
-            LOGGER.info("REG: reply (positiv) sent");
-            message.reply(new JsonObject().put("REGsuccess", Boolean.TRUE));
-        } else {
-            String grund = reply.cause().toString();
-            LOGGER.info(grund);
-            if (grund.equals(USER_EXISTIERT)) {
-                LOGGER,info("REG: reply (negative) sent");
-                message.reply(new JsonObject().put("REGsuccess", oolean.False));
-            }
-        }
-    });
-}
-
-//case"ueberpruefe-passwort";
-//    überprüfeUser(message);
-//    break;
-//case "erstelleUser";
-//    erstelleNeuenUser(message);
-//break;
-
-//Zugriff durch
-//JsonObject request = new JsonObject().put("passwort", passwort).put("adresse", adresse);
-//DeliveryOptions options = new DeliveryOptions().addHeader("action", "erstelleUser");
-//vertx.eventus().send(EB_ADRESSE, request, options, reply -> {

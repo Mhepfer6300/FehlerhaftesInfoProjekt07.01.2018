@@ -40,19 +40,62 @@ $(document).ready(function () {
     });
 
     $(document).on("click", "#neueruserknopf", function () {
+        $("body").html("Herzlichen Glückwunsch sie haben sich erfolgreich auf unserer Seite registriert!<br>")
+                .append("<input type='button' value='Zum Sportmagazin!' id='HomepageKnopf'/<\");
+    });
 
-        if ($("#neuespasswort").val() == $("#passwortbestätigen").val()) {
-        
-            $("body").html("Benutzer erstellt: " + $("#benutzername").val() + " Passwort: " + $("#neuespasswort").val() + " <br>")
-                    .append("Einloggen<br>\nName: <input type='text' id='Anmeldename'/><br>")
-                    .append("Passwort: <input type='password' id='passwort'/><br>\n")
-                    .append("<input type='button' value='OK' id='Anmeldeknopf'/>\n");
-                    
-            
-        } else {
-            $("body").append("<br>Passwort bitte überprüfen");
-        }   
-});
+    $(document).on("click", "#HomepageKnopf", function () {
+        $("body").html("EH - Das Sportmagazin!<br>Bundesliga Aktuell!<br><br>")
+                .append("<br>" + "Aktuelle Tabelle zum 18.Spieltag der Fußball-Bundesliga:<br>")
+                .append("<input type='button' value='Tabelle(18.Spieltag)' id='Tabellenknopf'/>\n")
+                .append("<input type='button' value='Heimtabelle' id='TabellenknopfHeim'/>\n")
+                .append("<input type='button' value='Auswärtstabelle' id='TabellenknopfAuswärts'/><br>\n")
+                .append(" <br>" + "Toptorjäger und ihre Verfolger:<br>")
+                .append("<input type='button' value='Torschützenliste' id='Torschützenbutton'/><br>\n")
+                .append(" <br>" + "Die aktuellsten Transfergerüchte:<br>")
+                .append("<input type='button' value='Transfernews' id='Transferbutton'/>");
+    });
+
+    $(document).on("click", "#Tabellenknopf", function () {
+        $("body").html("Die Aktuelle Tabelle der Saison 2012/2013!<br><br>")
+                .append("<br><input type='image' src='http://www.r-winners.de/sport_s04/Bilders04/s042013_ges_g.jpg'/>")
+                .append("<input type='button' value='Zurück zum Sportmagazin!' id='HomepageKnopf'/<\");
+    });
+
+    $(document).on("click", "#TabellenknopfHeim", function () {
+        $("body").html("Die Heimsbilanz aller Teams!<br><br>")
+                .append("<br><input type='image' src='http://www.r-winners.de/sport_s04/Bilders04/s042013_ges_h.jpg'/>")
+                .append("<input type='button' value='Zurück zum Sportmagazin!' id='HomepageKnopf'/<\");
+    });
+
+    $(document).on("click", "#TabellenknopfAuswärts", function () {
+        $("body").html("Die Auswärtsbilanz aller Teams!<br>")
+                .append("<br><input type='image' src='http://www.r-winners.de/sport_s04/Bilders04/s042013_ges_a.jpg'/>")
+                .append("<input type='button' value='Zurück zum Sportmagazin!' id='HomepageKnopf'/<\");
+    });
+
+    $(document).on("click", "#Torschützenbutton", function () {
+        $("body").html("Die Toptorjäger und ihre stärksten Rivalen!<br><br>")
+                .append("1.  Robert Lewandowski    (FC Bayern München)       Tore 15")
+                .append("2.  Pierre - E.Aubameyang (Borussia Dortmund)       Tore 13")
+                .append("3.  Alfred Finnbogadson   (FC Augsburg)             Tore 11")
+                .append("4.  Mark Uth              (TSG Hoffenheim)          Tore 9")
+                .append("5.  Kevin Volland         (Bayer 04 Leverkusen)")   Tore 9")
+                .append("6.  Timo Werner           (RB Leipzig)              Tore 8")
+                .append("7.  Nils Petersen         (SC Freiburg)             Tore 8")
+                .append("8.  Michael Gregoritsch   (FC Augsburg)             Tore 8")
+                .append(".   Guido Burgstaller     (FC Schalke)              Tore 7")
+                .append("10. Salomon Kalou         (Hertha BSC)              Tore 7")                
+                .append("<input type='button' value='Zurück zum Sportmagazin!' id='HomepageKnopf'/<\");
+    });
+
+    $(document).on("click", "#Transferbutton", function () {
+        $("body").html("Die aller heißesten Gerüchte, die neusten Transfers und Vertragsverhandlungen!<br>")
+                .append("Momentan ist der Transfermarkt leider geschlossen, weshalb es keine neuen Verhandlungen gibt.")
+                .append("<input type='button' value='Zurück zum Sportmagazin!' id='HomepageKnopf'/<\");
+    });
+
+
 
     $.post("../anfrage",
             {
